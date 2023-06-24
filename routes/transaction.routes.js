@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import parsePhoneNumber from "libphonenumber-js";
 import { cpf, cnpj } from "cpf-cnpj-validator";
 import cartModel from "../models/cart.model.js";
+import TransactionService from "../service/transaction.service.js";
 
 const route = express.Router();
 
@@ -112,7 +113,26 @@ route.post("/", async (req, res) => {
 
     await yupValidate.validate(req.body, { abortEarly: false });
 
-    return res.status(201).json();
+    const transaction = await TransactionService(
+      cartCode,
+      paymentType,
+      installments,
+      customerName,
+      customerEmail,
+      customerMobile,
+      customerDocument,
+      billingAddress,
+      billingNumber,
+      billingCity,
+      billingState,
+      billingZipCode,
+      creditCardNumber,
+      creditCardExpiration,
+      creditCardCvv,
+      creditCardHolderName
+    );
+
+    return res.status(201).json(transaction);
   } catch (error) {
     console.log(error);
     if (error instanceof Yup.ValidationError) {

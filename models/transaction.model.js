@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Schema, Types, model } from "mongoose";
 
 const schema = new Schema({
   cartCode: {
@@ -71,3 +71,5 @@ const schema = new Schema({
     type: String,
   },
 });
+
+export const Transaction = model("Transaction", schema);
