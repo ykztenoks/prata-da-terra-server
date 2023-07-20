@@ -26,7 +26,7 @@ const schema = new Schema({
   },
   paymentType: {
     type: String,
-    enum: ["credit_card", "bill", "pix"],
+    enum: ["credit_card", "boleto", "pix"],
   },
   installments: {
     type: Number,

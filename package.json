@@ -8,6 +8,8 @@
   },
   "license": "ISC",
   "dependencies": {
+    "api": "^6.1.0",
+    "axios": "^1.4.0",
     "cors": "^2.8.5",
     "cpf-cnpj-validator": "^1.0.3",
     "dotenv": "^16.1.4",

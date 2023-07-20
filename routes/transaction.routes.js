@@ -126,6 +126,7 @@ route.post("/", async (req, res) => {
       billingCity,
       billingState,
       billingZipCode,
+      billingNeighborhood,
       creditCardNumber,
       creditCardExpiration,
       creditCardCvv,
