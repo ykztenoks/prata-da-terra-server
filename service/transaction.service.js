@@ -1,4 +1,4 @@
-import cartModel from "../models/cart.model";
+import Cart from "../models/cart.model.js";
 import { Transaction } from "../models/transaction.model";
 import { v4 as uuidv4 } from "uuid";
 import orderProcess from "../providers/PagSeguroProvider";
@@ -17,15 +17,17 @@ async function TransactionService(
   billingState,
   billingZipCode,
   billingNeighborhood,
+  billingComplement,
   creditCardNumber,
   creditCardExpiration,
   creditCardCvv,
-  creditCardHolderName
+  creditCardHolderName,
+  cartItems
 ) {
   try {
-    const cart = cartModel.findOne({ cartCode });
+    const cart = await Cart.findOne({ code: cartCode });
 
-    if (!cart) {
+    if (!"price" in cart) {
       throw `Cart ${cartCode} was not found`;
     }
 
@@ -46,6 +48,7 @@ async function TransactionService(
       billingState,
       billingCity,
       billingZipCode,
+      billingComplement,
     });
 
     await orderProcess({
@@ -63,11 +66,13 @@ async function TransactionService(
       billingState,
       billingCity,
       billingZipCode,
+      billingComplement,
       creditCardCvv,
       creditCardExpiration,
       creditCardHolderName,
       creditCardNumber,
       total: transaction.total,
+      cartItems,
     });
 
     return transaction;

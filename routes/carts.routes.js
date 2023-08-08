@@ -16,9 +16,13 @@ route.get("/", async (req, res) => {
 
 route.post("/create", async (req, res) => {
   try {
-    const { code, price } = req.body;
+    const { code, items } = req.body;
 
-    const created = await Cart.create({ code, price });
+    const price = items.reduce((acc, item) => {
+      return (acc += item.price * item.quantity);
+    }, 0);
+
+    const created = await Cart.create({ code, price, items });
 
     return res.status(201).json(created);
   } catch (error) {

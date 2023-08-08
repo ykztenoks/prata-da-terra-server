@@ -23,6 +23,7 @@ route.post("/", async (req, res) => {
       billingCity,
       billingState,
       billingZipCode,
+      billingComplement,
       creditCardNumber,
       creditCardExpiration,
       creditCardHolderName,
@@ -36,7 +37,9 @@ route.post("/", async (req, res) => {
 
     const yupValidate = Yup.object({
       cartCode: Yup.string().required(),
-      paymentType: Yup.mixed().oneOf(["credit_card", "bill", "pix"]).required(),
+      paymentType: Yup.mixed()
+        .oneOf(["credit_card", "boleto", "pix"])
+        .required(),
       installments: Yup.number()
         .min(1)
         .when("paymentType", (paymentType, schema) => {
@@ -78,6 +81,7 @@ route.post("/", async (req, res) => {
       billingCity: Yup.string().required(),
       billingState: Yup.string().required(),
       billingZipCode: Yup.string().required(),
+      billingComplement: Yup.string().required(),
       creditCardNumber: Yup.string().when("paymentType", {
         is: "credit_card",
         then: () =>
@@ -127,10 +131,12 @@ route.post("/", async (req, res) => {
       billingState,
       billingZipCode,
       billingNeighborhood,
+      billingComplement,
       creditCardNumber,
       creditCardExpiration,
       creditCardCvv,
-      creditCardHolderName
+      creditCardHolderName,
+      cart.items
     );
 
     return res.status(201).json(transaction);

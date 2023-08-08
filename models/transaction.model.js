@@ -61,6 +61,9 @@ const schema = new Schema({
   billingNeighborhood: {
     type: String,
   },
+  billingComplement: {
+    type: String,
+  },
   billingState: {
     type: String,
   },
