@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-//todo add type for user
 
 export function generateToken(user) {
   const { _id, name, email, type } = user;

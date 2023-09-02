@@ -5,9 +5,9 @@ import { cpf, cnpj } from "cpf-cnpj-validator";
 import cartModel from "../models/cart.model.js";
 import TransactionService from "../service/transaction.service.js";
 
-const route = express.Router();
+const router = express.Router();
 
-route.post("/", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const {
       cartCode,
@@ -156,4 +156,4 @@ route.post("/", async (req, res) => {
   }
 });
 
-export default route;
+export default router;

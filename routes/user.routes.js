@@ -16,6 +16,16 @@ router.post("/signup", async (req, res) => {
         .status(500)
         .json({ msg: "Todos os campos devem ser preenchidos." });
     }
+    if (
+      !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+        email
+      )
+    ) {
+      return res
+        .status(500)
+        .json({ msg: "Você deve informar um email válido." });
+    }
+
     const existingUser = await User.findOne({ email: email });
     if (existingUser) {
       return res.status(409).json({ msg: "Usuário já está registrado" });
@@ -115,26 +125,49 @@ router.patch("/profile", isAuth, loggedUser, async (req, res) => {
   try {
     const user = req.user;
 
-    allowedFields.forEach(async (field) => {
+    if (
+      req.body.password &&
+      !/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(
+        req.body.password
+      )
+    ) {
+      return res.status(400).json({
+        msg: "A senha deve conter no mínimo 8 caracteres, um caractere especial e um número.",
+      });
+    }
+
+    if (
+      req.body.email &&
+      !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+        req.body.email
+      )
+    ) {
+      return res
+        .status(500)
+        .json({ msg: "Você deve informar um email válido." });
+    }
+
+    for (const field of allowedFields) {
       if (req.body[field]) {
         if (field === "password") {
-          const salts = await bcrypt.genSalt(12);
-          const hashed = await bcrypt.hash(req.body["password"], salts);
+          const salts = bcrypt.genSaltSync(12);
+          const hashed = bcrypt.hashSync(req.body["password"], salts);
           user.password = hashed;
-          return;
-        }
-        if (addressFields.includes(field)) {
+        } else if (addressFields.includes(field)) {
           user.address[field] = req.body[field];
-          return;
+        } else {
+          user[field] = req.body[field];
         }
-        user[field] = req.body[field];
       }
-    });
+    }
 
     await user.save();
-
+    delete user._doc.password;
     res.status(200).json({ msg: "Usuário atualizado com sucesso!", user });
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ msg: "Usuário já está registrado" });
+    }
     console.log("erro ao editar o usuário ❌", error);
     return res.status(400).json({ msg: "Erro ao editar usuário." });
   }
@@ -143,7 +176,6 @@ router.patch("/profile", isAuth, loggedUser, async (req, res) => {
 router.delete("/profile", isAuth, loggedUser, async (req, res) => {
   try {
     await User.findByIdAndDelete(req.user._id);
-
     return res.status(200).json("Conta excluída com sucesso.");
   } catch (error) {
     console.log("erro ao deletar o usuário", error);
