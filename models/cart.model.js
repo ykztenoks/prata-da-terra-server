@@ -4,12 +4,10 @@ const schema = new Schema(
   {
     code: {
       type: String,
-      required: true,
       unique: true,
     },
     price: {
       type: Number,
-      required: true,
       min: 20,
     },
     items: [
@@ -19,6 +17,10 @@ const schema = new Schema(
         quantity: { type: Number, min: 1 },
       },
     ],
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   {
     timestamps: true,

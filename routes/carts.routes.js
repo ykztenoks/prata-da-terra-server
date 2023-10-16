@@ -1,5 +1,7 @@
 import express from "express";
 import Cart from "../models/cart.model.js";
+import isAuth from "../middlewares/isAuth.js";
+import loggedUser from "../middlewares/loggedUser.js";
 const route = express.Router();
 
 route.get("/", async (req, res) => {
@@ -14,15 +16,36 @@ route.get("/", async (req, res) => {
   }
 });
 
-route.post("/create", async (req, res) => {
+route.get("/:userId", isAuth, loggedUser, async (req, res) => {
+  const { userId } = req.params;
   try {
-    const { code, items } = req.body;
+    const cart = await Cart.findOne({ owner: userId });
+
+    return res.status(200).json(cart);
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({ msg: "Erro no servidor" });
+  }
+});
+
+route.post("/create", isAuth, loggedUser, async (req, res) => {
+  try {
+    const { items } = req.body;
 
     const price = items.reduce((acc, item) => {
       return (acc += item.price * item.quantity);
     }, 0);
 
-    const created = await Cart.create({ code, price, items });
+    if (req.user) {
+      const cartWithOwner = await Cart.create({
+        price,
+        items,
+        owner: req.user._id,
+      });
+      return res.status(201).json(cartWithOwner);
+    }
+    const created = await Cart.create({ price, items });
 
     return res.status(201).json(created);
   } catch (error) {

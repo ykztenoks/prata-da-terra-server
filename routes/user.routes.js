@@ -1,6 +1,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import { User } from "../models/user.model";
+import Cart from "../models/cart.model";
 import isAuth from "../middlewares/isAuth";
 import loggedUser from "../middlewares/loggedUser";
 import { generateToken } from "../config/jwt.config";
@@ -47,6 +48,8 @@ router.post("/signup", async (req, res) => {
       lastName,
     });
     delete user._doc.password;
+    await Cart.create({ owner: user._id });
+
     return res.status(201).json({ msg: "Usuário criado com sucesso!", user });
   } catch (error) {
     console.log("erro ao criar usuário ❌", error);
@@ -64,7 +67,9 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ email: email });
 
     if (!user) {
-      return res.status(404).json({ msg: "Email ou senha invalidos." });
+      return res
+        .status(404)
+        .json({ msg: "Usuário não existe, verifique o email." });
     }
 
     if (await bcrypt.compare(password, user.password)) {
@@ -90,6 +95,9 @@ router.post("/login", async (req, res) => {
 
 router.get("/profile", isAuth, loggedUser, async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(404).json({ msg: "Usuário não encontrado" });
+    }
     return res.status(200).json(req.user);
   } catch (error) {
     console.log(error);
@@ -124,7 +132,9 @@ router.patch("/profile", isAuth, loggedUser, async (req, res) => {
 
   try {
     const user = req.user;
-
+    if (!user) {
+      return res.status(404).json({ msg: "Usuário não encontrado" });
+    }
     if (
       req.body.password &&
       !/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(
@@ -175,6 +185,9 @@ router.patch("/profile", isAuth, loggedUser, async (req, res) => {
 
 router.delete("/profile", isAuth, loggedUser, async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(404).json({ msg: "Usuário não encontrado" });
+    }
     await User.findByIdAndDelete(req.user._id);
     return res.status(200).json("Conta excluída com sucesso.");
   } catch (error) {
