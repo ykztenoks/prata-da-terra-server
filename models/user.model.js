@@ -28,6 +28,7 @@ const schema = new Schema(
       complement: String,
     },
     orders: [{ type: Types.ObjectId, ref: "Transaction" }],
+    wishlist: [{ type: Types.ObjectId, ref: "Product" }],
     cart: { type: Types.ObjectId, ref: "Cart" },
     role: {
       type: String,

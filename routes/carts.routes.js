@@ -19,8 +19,7 @@ route.get("/", async (req, res) => {
 route.get("/:userId", isAuth, loggedUser, async (req, res) => {
   const { userId } = req.params;
   try {
-    const cart = await Cart.findOne({ owner: userId });
-
+    const cart = await Cart.findOne({ owner: userId }).populate("items");
     return res.status(200).json(cart);
   } catch (error) {
     console.log(error);
@@ -57,19 +56,15 @@ route.post("/create", isAuth, loggedUser, async (req, res) => {
 route.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { code, price } = req.body;
 
-    const cart = await Cart.findById(id);
+    let cart = await Cart.findById(id);
 
     if (!cart) {
       return res.status(404).json("Carrinho não encontrado");
     }
+    const updated = await Cart.findByIdAndUpdate(id, req.body, { new: true });
 
-    cart.code = code;
-    cart.price = price;
-
-    await cart.save();
-
+    console.log("updated cart =>>>>", updated);
     return res.status(200).json(cart);
   } catch (error) {
     console.log(error);

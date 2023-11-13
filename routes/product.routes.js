@@ -57,7 +57,9 @@ router.post("/create", isAuth, loggedUser, isAdmin, async (req, res) => {
       closure,
       newCollection,
       inStock,
-      image,
+      tags,
+
+      images,
     } = req.body;
     const productData = {
       name,
@@ -71,9 +73,10 @@ router.post("/create", isAuth, loggedUser, isAdmin, async (req, res) => {
       closure,
       newCollection,
       inStock,
-      image,
+      tags,
+      images,
     };
-
+    console.log("image in create", images);
     for (const prop in productData) {
       if (productData[prop] === undefined) {
         delete productData[prop];
@@ -81,7 +84,8 @@ router.post("/create", isAuth, loggedUser, isAdmin, async (req, res) => {
     }
 
     const product = await Product.create(productData);
-
+    console.log(" product data >>>>>", req.body);
+    console.log("created product >>>>>", product);
     return res.status(201).json(product);
   } catch (error) {
     console.log(error);

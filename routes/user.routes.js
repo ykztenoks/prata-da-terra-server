@@ -48,7 +48,7 @@ router.post("/signup", async (req, res) => {
       lastName,
     });
     delete user._doc.password;
-    await Cart.create({ owner: user._id });
+    await Cart.create({ owner: user._id, items: [] });
 
     return res.status(201).json({ msg: "Usuário criado com sucesso!", user });
   } catch (error) {

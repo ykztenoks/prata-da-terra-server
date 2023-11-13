@@ -3,8 +3,9 @@ import mongoose, { Schema } from "mongoose";
 const schema = new Schema(
   {
     name: { type: String, trim: true, required: true },
+    images: [{ type: String, required: true }],
     price: { type: Number, required: true },
-    image: { type: String, required: true },
+    inStock: { type: Boolean, default: true },
     description: { type: String, trim: true, required: true },
     type: {
       type: String,
@@ -24,13 +25,13 @@ const schema = new Schema(
       ],
     },
     style: { type: String, trim: true, required: true },
-    size: { type: Number, trim: true },
+    size: [{ type: Number, trim: true }],
     stones: { type: String, trim: true },
     model: { type: String, trim: true },
     closure: { type: String, trim: true },
     newCollection: { type: Boolean, default: false },
-    inStock: { type: Boolean, default: true },
     discount: { type: Number },
+    tags: [{ type: String, trim: true }],
   },
   {
     timestamps: true,
