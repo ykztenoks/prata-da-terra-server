@@ -2,11 +2,12 @@
   "name": "prata-da-terra-server",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon ./src/app.js",
-    "build": "sucrase ./src -d /build --transforms javascript,imports",
-    "start": "node ./src -d /build --transforms javascript,imports"
+    "build": "node ./src/app.js",
+    "start": "node ./src/app.js"
   },
   "license": "ISC",
   "dependencies": {

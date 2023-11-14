@@ -1,10 +1,10 @@
 import express from "express";
 import bcrypt from "bcryptjs";
-import { User } from "../models/user.model";
-import Cart from "../models/cart.model";
-import isAuth from "../middlewares/isAuth";
-import loggedUser from "../middlewares/loggedUser";
-import { generateToken } from "../config/jwt.config";
+import { User } from "../models/user.model.js";
+import Cart from "../models/cart.model.js";
+import isAuth from "../middlewares/isAuth.js";
+import loggedUser from "../middlewares/loggedUser.js";
+import { generateToken } from "../config/jwt.config.js";
 
 const router = express.Router();
 

@@ -1,7 +1,7 @@
 import Cart from "../models/cart.model.js";
-import { Transaction } from "../models/transaction.model";
+import { Transaction } from "../models/transaction.model.js";
 import { v4 as uuidv4 } from "uuid";
-import orderProcess from "../providers/PagSeguroProvider";
+import orderProcess from "../providers/PagSeguroProvider.js";
 
 async function TransactionService(
   cartCode,

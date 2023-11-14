@@ -1,7 +1,7 @@
 import express from "express";
-import isAuth from "../middlewares/isAuth";
-import isAdmin from "../middlewares/isAdmin";
-import loggedUser from "../middlewares/loggedUser";
+import isAuth from "../middlewares/isAuth.js";
+import isAdmin from "../middlewares/isAdmin.js";
+import loggedUser from "../middlewares/loggedUser.js";
 import { uploadImage } from "../config/cloudinary.config.js";
 
 const router = express.Router();

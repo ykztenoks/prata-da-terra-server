@@ -1,8 +1,8 @@
 import express from "express";
-import { Product } from "../models/product.model";
-import isAdmin from "../middlewares/isAdmin";
-import isAuth from "../middlewares/isAuth";
-import loggedUser from "../middlewares/loggedUser";
+import { Product } from "../models/product.model.js";
+import isAdmin from "../middlewares/isAdmin.js";
+import isAuth from "../middlewares/isAuth.js";
+import loggedUser from "../middlewares/loggedUser.js";
 
 const router = express.Router();
 
