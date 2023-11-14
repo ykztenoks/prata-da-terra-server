@@ -6,13 +6,13 @@ import chalk from "chalk";
 
 import "dotenv/config";
 
-import connect from "../db/config.db.js";
+import connect from "./db/config.db.js";
 
-import cartRoutes from "../routes/carts.routes.js";
-import transactionRoutes from "../routes/transaction.routes.js";
-import userRoutes from "../routes/user.routes.js";
-import productRoutes from "../routes/product.routes.js";
-import uploadRouter from "../routes/uploadimage.routes.js";
+import cartRoutes from "./routes/carts.routes.js";
+import transactionRoutes from "./routes/transaction.routes.js";
+import userRoutes from "./routes/user.routes.js";
+import productRoutes from "./routes/product.routes.js";
+import uploadRouter from "./routes/uploadimage.routes.js";
 const app = express();
 app.use(helmet());
 app.use(
