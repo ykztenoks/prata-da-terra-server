@@ -10,8 +10,4 @@ if (process.env.TOKEN_SIGN_SECRET === undefined) {
 export default expressjwt({
   secret: process.env.TOKEN_SIGN_SECRET,
   algorithms: ["HS256"],
-  function(err, decoded) {
-    console.log("Error JWT", err);
-    console.log("Error JWT, decoded value >>", decoded);
-  },
 });

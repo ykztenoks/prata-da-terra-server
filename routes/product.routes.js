@@ -3,9 +3,10 @@ import { Product } from "../models/product.model.js";
 import isAdmin from "../middlewares/isAdmin.js";
 import isAuth from "../middlewares/isAuth.js";
 import loggedUser from "../middlewares/loggedUser.js";
+import Correios from "node-correios/lib/correios.js";
 
 const router = express.Router();
-
+const correio = new Correios();
 router.get("/", async (req, res) => {
   try {
     const products = await Product.find();
@@ -95,6 +96,7 @@ router.post("/create", isAuth, loggedUser, isAdmin, async (req, res) => {
 
 router.patch("/:id", isAuth, loggedUser, isAdmin, async (req, res) => {
   const { id } = req.params;
+  console.log("req.body", req.body);
   try {
     const {
       name,
@@ -109,6 +111,8 @@ router.patch("/:id", isAuth, loggedUser, isAdmin, async (req, res) => {
       newCollection,
       inStock,
       discount,
+      tags,
+      images,
     } = req.body;
     const productData = {
       name,
@@ -123,6 +127,8 @@ router.patch("/:id", isAuth, loggedUser, isAdmin, async (req, res) => {
       newCollection,
       inStock,
       discount,
+      tags,
+      images,
     };
     for (const prop in productData) {
       if (productData[prop] === undefined) {
@@ -141,6 +147,14 @@ router.patch("/:id", isAuth, loggedUser, isAdmin, async (req, res) => {
     return res.status(500).json({ msg: "Erro ao editar produto." });
   }
 });
+
+// router.get('/frete', async (req, res) => {
+//   try {
+
+//   } catch (error) {
+
+//   }
+// })
 
 router.delete("/:id", isAuth, loggedUser, isAdmin, async (req, res) => {
   try {

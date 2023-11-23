@@ -25,7 +25,7 @@ const schema = new Schema(
       ],
     },
     style: { type: String, trim: true, required: true },
-    size: [{ type: Number, trim: true }],
+    size: { type: Number, trim: true },
     stones: { type: String, trim: true },
     model: { type: String, trim: true },
     closure: { type: String, trim: true },
